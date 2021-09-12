@@ -8,8 +8,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using SignalR.DataAccess;
 using SignalR.Hubs;
-using SignalR.Models;
-using SignalR.Service;
+using SignalR.Interfaces;
+using SignalR.Services;
 using System.Text;
 
 namespace SignalR
@@ -29,9 +29,10 @@ namespace SignalR
             services.AddControllers();
             services.AddCors();
             services.AddScoped<ILoggedUsers, LoggedUsers>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddDbContext<Context>(opt => opt.UseInMemoryDatabase(databaseName: "SignalRTest"));
 
-            var key = Encoding.ASCII.GetBytes(Settings.Secret);
+            var key = Encoding.ASCII.GetBytes(Configuration["JWTSecret"]);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

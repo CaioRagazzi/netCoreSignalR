@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SignalR.DataAccess;
+using SignalR.Interfaces;
 using SignalR.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SignalR.Service
+namespace SignalR.Services
 {
     public class LoggedUsers : ILoggedUsers
     {

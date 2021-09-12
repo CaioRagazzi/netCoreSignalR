@@ -1,19 +1,27 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using SignalR.Interfaces;
+using SignalR.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace SignalR.Models
+namespace SignalR.Services
 {
-    public static class Settings
+    public class AuthService : IAuthService
     {
-        public static string Secret = "fedaf7d8863b48e197b9287d492b708e";
+        private readonly IConfiguration _configuration;
 
-        public static string GenerateToken(User user)
+        public AuthService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Settings.Secret);
+            var key = Encoding.ASCII.GetBytes(_configuration["JWTSecret"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

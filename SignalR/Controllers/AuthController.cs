@@ -1,28 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using SignalR.Interfaces;
 using SignalR.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SignalR.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class LoginController : ControllerBase
+    public class AuthController : ControllerBase
     {
+        private readonly IAuthService _authService;
+        public AuthController(IAuthService authService)
+        {
+            _authService = authService;
+        }
 
         [HttpPost]
         public ActionResult<dynamic> Login(User user)
         {
-            // Gera o Token
-            var token = Settings.GenerateToken(user);
-
-            // Oculta a senha
+            var token = _authService.GenerateToken(user);
             user.Password = "";
-
-            // Retorna os dados
             return new
             {
                 user = user,
